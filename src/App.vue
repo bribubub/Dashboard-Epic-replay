@@ -1,13 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 
-// 1. IMPORT PAGES (Dari folder components)
-import Dashboard from './components/HelloWorld.vue'
+// 1. IMPORT PAGES
+// (Pastikan nama file di folder components sesuai, di sini mengarah ke HelloWorld.vue sesuai file yang kamu upload)
+import Dashboard from './components/HelloWorld.vue' 
 import Statistics from './components/Statistics.vue'
 import History from './components/History.vue'
 
-// 2. IMPORT UI PARTIALS (Dari folder partials)
-import FloatingButton from './partials/FloatingButton.vue'
+// 2. IMPORT UI PARTIALS
+// FloatingButton dihapus dari sini
 import Sidebar from './partials/Sidebar.vue'
 import Header from './partials/Header.vue'
 
@@ -17,8 +18,6 @@ const currentPage = ref('dashboard')
 <template>
   <div class="flex min-h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
     
-    <FloatingButton />
-
     <Sidebar 
       :activePage="currentPage" 
       @changePage="(page) => currentPage = page" 
@@ -53,9 +52,22 @@ const currentPage = ref('dashboard')
 
 <style>
 @import "tailwindcss";
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-body { overflow: hidden; }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+body {
+  overflow: hidden;
+}
 </style>
