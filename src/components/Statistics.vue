@@ -1,5 +1,4 @@
 <script setup>
-// Props & Emits tetap sama
 defineProps({
   videos: Array
 })
@@ -7,9 +6,9 @@ defineEmits(['deleteVideo'])
 </script>
 
 <template>
-  <div class="space-y-6 h-full flex flex-col">
+  <div class="space-y-6">
     
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 shrink-0">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h2 class="text-xl font-bold text-slate-800">Video Storage</h2>
         <p class="text-slate-500 text-sm">Galeri rekaman tersimpan dari Server Prasimax.</p>
@@ -26,9 +25,13 @@ defineEmits(['deleteVideo'])
       </div>
     </div>
 
-    <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+    <div class="h-[72vh] overflow-y-auto pr-2 custom-scrollbar border border-slate-100 rounded-2xl p-2 bg-slate-50/50">
       
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
+      <div v-if="videos.length === 0" class="text-center py-20 text-slate-400">
+         <p>Tidak ada video yang ditemukan.</p>
+      </div>
+
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         
         <div 
           v-for="video in videos" 
@@ -68,14 +71,14 @@ defineEmits(['deleteVideo'])
                 :href="video.url" 
                 download 
                 target="_blank"
-                class="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-slate-100 hover:text-blue-600 transition-colors border border-slate-100"
+                class="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-slate-100 hover:text-blue-600 transition-colors border border-slate-100 cursor-pointer"
               >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                 Download
               </a>
               <button 
                 @click="$emit('deleteVideo', video.id)"
-                class="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-colors border border-slate-100"
+                class="flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 text-slate-600 text-xs font-bold hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-colors border border-slate-100 cursor-pointer"
               >
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                 Delete
@@ -85,7 +88,5 @@ defineEmits(['deleteVideo'])
         </div>
 
       </div>
-    </div>
-
-  </div>
+    </div> </div>
 </template>

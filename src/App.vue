@@ -1,8 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-
-// Import Service API yang baru kita buat
-import { fetchVideos } from './services/videoService'
+import { fetchVideos } from './services/videoService' // Import API Service
 
 import Dashboard from './components/HelloWorld.vue'
 import Statistics from './components/Statistics.vue' 
@@ -12,44 +10,41 @@ import Header from './partials/Header.vue'
 
 const currentPage = ref('dashboard')
 const isSidebarOpen = ref(false)
+const allVideos = ref([])
+const isLoading = ref(true)
 
+// Fungsi Buka/Tutup Sidebar (Hover)
 const setSidebar = (isOpen) => {
   isSidebarOpen.value = isOpen
 }
 
-// --- DATA VIDEOS ---
-// Awalnya kosong, nanti diisi dari API
-const allVideos = ref([])
-
-// Fungsi untuk Load Data dari API
+// Load Data API
 const loadVideosFromApi = async () => {
+  isLoading.value = true
   const apiData = await fetchVideos();
   
-  // MAPPING DATA: Menyesuaikan format API dengan format Dashboard kita
-  // API mungkin punya field "filename", tapi kita butuh "title". Kita cocokkan di sini.
   allVideos.value = apiData.map((video, index) => ({
-    id: video.id || index + 1, // Pakai ID dari API atau nomor urut
-    title: video.name || video.filename || 'Untitled Video', // Cek nama field di API
-    url: video.url || video.link || '', // URL video
-    size: video.size ? `${video.size} MB` : 'Unknown', // Ukuran file
-    date: video.created_at || new Date().toLocaleDateString(), // Tanggal
-    duration: video.duration || '00:00', // Durasi
-    type: 'MP4' // Default type
+    id: video.id || index + 1,
+    title: video.name || video.filename || `Video Recording ${index + 1}`,
+    url: video.url || video.link || '', 
+    size: video.size ? `${video.size} MB` : 'Unknown',
+    date: video.created_at || new Date().toLocaleDateString(),
+    duration: video.duration || '00:00',
+    type: 'MP4'
   }))
+  isLoading.value = false
 }
 
-// Panggil fungsi saat aplikasi pertama kali dibuka (Mounted)
 onMounted(() => {
   loadVideosFromApi()
 })
 
 const recentVideos = computed(() => {
-  // Ambil 5 video terakhir (asumsi data API urut dari lama ke baru, kita balik biar yang baru di atas)
   return [...allVideos.value].reverse().slice(0, 5)
 })
 
 const handleDeleteVideo = (id) => {
-  if(confirm('Are you sure you want to delete this video locally?')) {
+  if(confirm('Hapus video ini dari tampilan lokal?')) {
     allVideos.value = allVideos.value.filter(v => v.id !== id)
   }
 }
@@ -73,9 +68,8 @@ const handlePageChange = (pageName) => {
       
       <Header :title="currentPage" />
 
-      <div class="flex-1 overflow-y-auto p-8 custom-scrollbar relative">
-        <div class="max-w-6xl mx-auto">
-          <Transition 
+      <div class="flex-1 overflow-y-auto p-8 custom-scrollbar relative h-full">
+        <div class="max-w-6xl mx-auto pb-20"> <Transition 
             mode="out-in"
             enter-active-class="transition duration-300 ease-out"
             enter-from-class="opacity-0 translate-y-4"
@@ -86,8 +80,9 @@ const handlePageChange = (pageName) => {
           >
             <div :key="currentPage">
               
-              <div v-if="allVideos.length === 0 && currentPage !== 'history'" class="p-10 text-center text-slate-400 animate-pulse">
-                Sedang menghubungkan ke Server Prasimax...
+              <div v-if="isLoading && currentPage !== 'history'" class="p-10 text-center flex flex-col items-center justify-center text-slate-400 gap-3">
+                <div class="w-8 h-8 border-4 border-slate-200 border-t-emerald-500 rounded-full animate-spin"></div>
+                <p class="text-sm font-medium animate-pulse">Menghubungkan ke Server Prasimax...</p>
               </div>
 
               <Dashboard 
@@ -107,6 +102,7 @@ const handlePageChange = (pageName) => {
               <History v-else-if="currentPage === 'history'" />
             </div>
           </Transition>
+
         </div>
       </div>
     </main>
@@ -115,9 +111,11 @@ const handlePageChange = (pageName) => {
 
 <style>
 @import "tailwindcss";
-.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+
+/* Styling Scrollbar Modern */
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 body { overflow: hidden; }
 </style>
