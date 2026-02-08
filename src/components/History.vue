@@ -1,55 +1,52 @@
+<script setup>
+import { ref } from 'vue'
+
+const incomingHistory = ref([
+  { id: 1, source: 'Upload_Manual', time: '14:30:05', date: '02 Feb 2026', status: 'Success' },
+  { id: 2, source: 'Auto_Save_OBS', time: '13:15:22', date: '02 Feb 2026', status: 'Success' },
+  { id: 3, source: 'Live_Stream_01', time: '10:00:00', date: '02 Feb 2026', status: 'Failed' },
+  { id: 4, source: 'Upload_Manual', time: '09:45:10', date: '01 Feb 2026', status: 'Success' },
+  { id: 5, source: 'Auto_Save_OBS', time: '23:55:01', date: '31 Jan 2026', status: 'Success' },
+])
+</script>
+
 <template>
   <div class="space-y-6">
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
-      <div>
-        <h2 class="text-xl font-bold text-slate-800">Activity History</h2>
-        <p class="text-slate-500 text-sm">Daftar lengkap rekaman dan aktivitas sistem.</p>
-      </div>
-      <div class="flex gap-2">
-        <input type="text" placeholder="Search history..." class="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
-      </div>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+      <h2 class="text-xl font-bold text-slate-800">Incoming Log</h2>
+      <p class="text-slate-500 text-sm">Riwayat waktu video masuk ke dalam sistem.</p>
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-      <div class="divide-y divide-slate-100">
-        <div class="p-6 hover:bg-slate-50 transition flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center font-bold text-xs">
-              REC
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800">New Replay Saved: Valorant_Match_01</h4>
-              <p class="text-xs text-slate-400">Feb 02, 2026 • 10:45 AM</p>
-            </div>
-          </div>
-          <span class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">System</span>
-        </div>
-
-        <div class="p-6 hover:bg-slate-50 transition flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">
-              USR
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800">User Rafi_Dev logged in</h4>
-              <p class="text-xs text-slate-400">Feb 02, 2026 • 09:12 AM</p>
-            </div>
-          </div>
-          <span class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Security</span>
-        </div>
-
-        <div class="p-6 hover:bg-slate-50 transition flex items-center justify-between">
-          <div class="flex items-center gap-4">
-            <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center font-bold text-xs">
-              DEL
-            </div>
-            <div>
-              <h4 class="font-bold text-slate-800">Auto-cleanup: Deleted 5 old cache files</h4>
-              <p class="text-xs text-slate-400">Feb 01, 2026 • 11:59 PM</p>
-            </div>
-          </div>
-          <span class="text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">Maintenance</span>
-        </div>
+       <div class="p-6 border-b border-slate-100">
+        <h3 class="font-bold text-slate-800">Activity Log</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] font-bold">
+            <tr>
+              <th class="px-6 py-4">Source</th>
+              <th class="px-6 py-4">Time</th>
+              <th class="px-6 py-4">Date</th>
+              <th class="px-6 py-4">Status</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr v-for="log in incomingHistory" :key="log.id" class="hover:bg-slate-50 transition">
+              <td class="px-6 py-4 font-medium text-slate-700">{{ log.source }}</td>
+              <td class="px-6 py-4 text-slate-600 font-mono">{{ log.time }}</td>
+              <td class="px-6 py-4 text-slate-600">{{ log.date }}</td>
+              <td class="px-6 py-4">
+                <span 
+                  class="px-2 py-1 rounded-md text-[10px] font-bold border" 
+                  :class="log.status === 'Success' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' : 'text-red-600 bg-red-50 border-red-100'"
+                >
+                  {{ log.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

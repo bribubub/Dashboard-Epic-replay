@@ -1,12 +1,16 @@
 <script setup>
 defineProps({ title: String })
+// Event toggle-sidebar dihapus karena tidak dipakai lagi di sini
 </script>
 
 <template>
-  <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shadow-sm shrink-0">
-    <div class="flex items-center gap-2">
-      <span class="text-slate-400 text-sm">Pages /</span>
-      <h1 class="text-sm font-bold text-slate-800 uppercase tracking-widest">{{ title }}</h1>
+  <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm shrink-0 z-20 relative">
+    
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-slate-400 text-sm hidden sm:inline">Pages /</span>
+        <h1 class="text-sm font-bold text-slate-800 uppercase tracking-widest">{{ title }}</h1>
+      </div>
     </div>
     
     <div class="flex items-center gap-5">
