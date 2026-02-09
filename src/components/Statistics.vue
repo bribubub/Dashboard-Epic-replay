@@ -48,9 +48,6 @@ defineEmits(['deleteVideo'])
               Your browser does not support the video tag.
             </video>
             
-            <div class="absolute bottom-2 right-2 bg-black/70 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-              {{ video.duration }}
-            </div>
           </div>
 
           <div class="p-4 flex-1 flex flex-col justify-between">

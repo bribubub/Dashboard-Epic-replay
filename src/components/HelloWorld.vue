@@ -1,14 +1,12 @@
 <script setup>
-import { ref } from 'vue'
-
 defineProps({
   msg: String,
   totalVideos: Number,
-  recentVideos: Array
+  recentVideos: Array,
+  serverStatus: Boolean // Menerima status server dari App.vue
 })
 
-const emit = defineEmits(['changePage'])
-const count = ref(0)
+defineEmits(['changePage'])
 </script>
 
 <template>
@@ -18,24 +16,34 @@ const count = ref(0)
       <p class="text-slate-500 text-sm">Sistem manajemen konten dan statistik video untuk Prasimax.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      
       <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h3 class="text-slate-400 text-xs font-bold uppercase tracking-wider">Interaksi User</h3>
-        <div class="mt-2 flex items-center justify-between">
-          <span class="text-3xl font-bold text-slate-900">{{ count }}</span>
-          <button @click="count++" class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold hover:bg-emerald-100 transition cursor-pointer">
-            + Klik Test
-          </button>
+        <h3 class="text-slate-400 text-xs font-bold uppercase tracking-wider">Status API Server</h3>
+        <div class="mt-2 flex items-center gap-3">
+          <span class="relative flex h-3 w-3">
+            <span v-if="serverStatus" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3" :class="serverStatus ? 'bg-emerald-500' : 'bg-red-500'"></span>
+          </span>
+          
+          <p class="text-3xl font-bold" :class="serverStatus ? 'text-emerald-500' : 'text-red-500'">
+            {{ serverStatus ? 'Online' : 'Offline' }}
+          </p>
         </div>
+        <p class="text-xs text-slate-400 mt-1">
+          {{ serverStatus ? 'Terhubung ke AWS Prasimax' : 'Gagal terhubung ke server' }}
+        </p>
       </div>
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <h3 class="text-slate-400 text-xs font-bold uppercase tracking-wider">Status Server</h3>
-        <p class="mt-2 text-3xl font-bold text-emerald-500">Active</p>
-      </div>
+
       <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
         <h3 class="text-slate-400 text-xs font-bold uppercase tracking-wider">Total Replays</h3>
-        <p class="mt-2 text-3xl font-bold text-slate-900">{{ totalVideos }}</p>
+        <div class="mt-2 flex items-baseline gap-2">
+           <p class="text-3xl font-bold text-slate-900">{{ totalVideos }}</p>
+           <span class="text-sm text-slate-400">Videos</span>
+        </div>
+        <p class="text-xs text-slate-400 mt-1">Total video tersimpan di database lokal.</p>
       </div>
+
     </div>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
